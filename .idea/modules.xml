@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Minecraft Mods.iml" filepath="$PROJECT_DIR$/.idea/Minecraft Mods.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.client.iml" filepath="$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.main.iml" filepath="$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.test.iml" filepath="$PROJECT_DIR$/.idea/modules/elytra-mod-template-1.21.4.test.iml" />
+    </modules>
+  </component>
+</project>

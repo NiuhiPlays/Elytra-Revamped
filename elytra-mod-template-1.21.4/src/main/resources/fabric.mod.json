@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "elytra-mod",
+	"version": "${version}",
+	"name": "Elytra mod",
+	"description": "Revamping the Elytra, aka nerfing the f*ck out of it",
+	"authors": [
+		"NiuhiPlays"
+	],
+	"contact": {
+		"homepage": "No",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/elytra-mod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"niuhi.elytra.ElytraMod"
+		],
+		"client": [
+			"niuhi.elytra.ElytraModClient"
+		]
+	},
+	"mixins": [
+		"elytra-mod.mixins.json",
+		{
+			"config": "elytra-mod.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
