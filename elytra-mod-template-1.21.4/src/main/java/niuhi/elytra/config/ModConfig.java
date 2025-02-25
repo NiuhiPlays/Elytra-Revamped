@@ -14,11 +14,11 @@ public class ModConfig {
     // Default configuration values
     public double baseBoost = 0.4;  // Default boost
     public double hayBoost = 0.8;   // Boost when above a haybale campfire
+    public double basePull = 0.1;  // Default boost
+    public double hayPull = 0.25;   // Boost when above a haybale campfire
     public int normalFireHeight = 10; // Detection height for regular fire/campfires
     public int hayFireHeight = 25; // Detection height for haybale campfires
     public boolean disableFireworks = true; // Should fireworks be disabled?
-    public double basePull = 0.1;  // Default boost
-    public double hayPull = 0.25;   // Boost when above a haybale campfire
 
     // Load configuration from file
     public static ModConfig load() {

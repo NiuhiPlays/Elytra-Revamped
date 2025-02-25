@@ -60,6 +60,7 @@ public class ModEvents {
                 && !player.isOnGround()
                 && (player.getVelocity().y != 0 || Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().z) > 0.1);
     }
+
     /**
      * Checks if the player is above a fire, lit campfire, or soul campfire.
      */
@@ -108,11 +109,10 @@ public class ModEvents {
                 boolean isSoulCampfire = blockState.isOf(Blocks.SOUL_CAMPFIRE);
 
                 if (isLit) {
-                    boostAmount = hasHayBale ? config.hayBoost : config.baseBoost;
-
-                    // Soul campfires should PULL the player DOWN instead of boosting
                     if (isSoulCampfire) {
-                        boostAmount = -config.basePull; // Apply downward force
+                        boostAmount = -config.basePull; // Downward pull for soul campfires
+                    } else {
+                        boostAmount = hasHayBale ? config.hayBoost : config.baseBoost; // Different boost for hay or general fire
                     }
 
                     // Adjust boost based on vertical distance
@@ -147,7 +147,13 @@ public class ModEvents {
             BlockState blockState = world.getBlockState(belowPos);
 
             if (blockState.isOf(Blocks.SOUL_CAMPFIRE) && blockState.contains(CampfireBlock.LIT) && blockState.get(CampfireBlock.LIT)) {
-                applyBoost(player, -0.2); // Apply a downward force
+                // Check if there's hay nearby and apply appropriate pull
+                boolean hasHayBale = world.getBlockState(belowPos.down()).isOf(Blocks.HAY_BLOCK);
+                if (hasHayBale) {
+                    applyBoost(player, -config.hayPull); // Use the hayPull for a stronger downward pull if there's hay
+                } else {
+                    applyBoost(player, -config.basePull); // Use the basePull for soul campfires without hay
+                }
                 return;
             }
         }
