@@ -1,6 +1,7 @@
 package niuhi.elytra;
 
 import net.fabricmc.api.ModInitializer;
+import niuhi.elytra.config.ModConfig;
 import niuhi.elytra.detection.ModEvents;
 
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class ElytraMod implements ModInitializer {
 	public static final String MOD_ID = "elytra-mod";
+	public static final ModConfig CONFIG = ModConfig.load();
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -22,5 +24,6 @@ public class ElytraMod implements ModInitializer {
 		System.out.println("Elytra Boost Mod is loading...");
 		ModEvents.register();
 		LOGGER.info("Mod Testing");
+		CONFIG.save(); // Ensure the config file is created on first launch
 	}
 }
