@@ -32,8 +32,6 @@ Current Features:
 
 Planned Features:
 
-- Config options
-- Tweaked default values
 - Smoke flares?
 - Bigger stacks of campfires bigger boost?
 - maybe more?
