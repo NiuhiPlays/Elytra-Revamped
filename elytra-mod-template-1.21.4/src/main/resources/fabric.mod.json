@@ -3,12 +3,12 @@
 	"id": "elytra-mod",
 	"version": "${version}",
 	"name": "Elytra mod",
-	"description": "Revamping the Elytra, aka nerfing the f*ck out of it",
+	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"NiuhiPlays"
+		"Me!"
 	],
 	"contact": {
-		"homepage": "No",
+		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",

@@ -1,6 +1,7 @@
 package niuhi.elytra;
 
 import net.fabricmc.api.ModInitializer;
+import niuhi.elytra.detection.ModEvents;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,8 @@ public class ElytraMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-
-		LOGGER.info("Hello Fabric world!");
+		System.out.println("Elytra Boost Mod is loading...");
+		ModEvents.register();
+		LOGGER.info("Mod Testing");
 	}
 }
