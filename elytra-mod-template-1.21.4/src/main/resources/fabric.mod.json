@@ -3,9 +3,9 @@
 	"id": "elytra-mod",
 	"version": "${version}",
 	"name": "Elytra mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Elytra Revamped! Inspired by Aileron",
 	"authors": [
-		"Me!"
+		"Niuhi"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
