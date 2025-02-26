@@ -1,4 +1,4 @@
-![alt text](https://postimg.cc/5HbDKnTV)
+![image](https://i.postimg.cc/VNC16hFd/Elytra-Revamped.png)
 
 
 Decided it took long enough for a mod like this comeback...
