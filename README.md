@@ -1,3 +1,6 @@
+![alt text]((https://postimg.cc/5HbDKnTV))
+
+
 Decided it took long enough for a mod like this comeback...
 
 This mod is inspired by Aileron  
@@ -34,4 +37,5 @@ Planned Features:
 
 - Smoke flares?
 - Bigger stacks of campfires bigger boost?
-- maybe more?
+- optimized code
+- better config
