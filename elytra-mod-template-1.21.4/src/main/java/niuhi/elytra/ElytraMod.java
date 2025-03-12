@@ -21,9 +21,9 @@ public class ElytraMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		System.out.println("Elytra Boost Mod is loading...");
+		LOGGER.info("Elytra Boost Mod is loading...");
 		ModEvents.register();
 		LOGGER.info("Mod Testing");
-		CONFIG.save(); // Ensure the config file is created on first launch
+		ModConfig.save(CONFIG); // Fixed: Call the static save method with CONFIG as the parameter
 	}
 }

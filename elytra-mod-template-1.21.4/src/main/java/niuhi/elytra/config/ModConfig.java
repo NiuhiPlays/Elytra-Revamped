@@ -4,40 +4,77 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ModConfig {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("elytra_mod_config.json");
+    // Fire boost configuration
+    public FireBoostConfig fireBoost = new FireBoostConfig();
+    // Soul fire configuration
+    public SoulFireConfig soulFire = new SoulFireConfig();
+    // General mechanics configuration
+    public MechanicsConfig mechanics = new MechanicsConfig();
 
-    // Default configuration values
-    public double baseBoost = 0.4;  // Default boost
-    public double hayBoost = 0.8;   // Boost when above a haybale campfire
-    public double basePull = 0.1;  // Default boost
-    public double hayPull = 0.25;   // Boost when above a haybale campfire
-    public int normalFireHeight = 10; // Detection height for regular fire/campfires
-    public int hayFireHeight = 25; // Detection height for haybale campfires
-    public boolean disableFireworks = true; // Should fireworks be disabled?
-
-    // Load configuration from file
-    public static ModConfig load() {
-        if (CONFIG_PATH.toFile().exists()) {
-            try (Reader reader = new FileReader(CONFIG_PATH.toFile())) {
-                return GSON.fromJson(reader, ModConfig.class);
-            } catch (IOException e) {
-                System.err.println("Failed to load config file! Using default values.");
-            }
-        }
-        return new ModConfig(); // Return default config if loading fails
+    public static class FireBoostConfig {
+        public boolean enabled = true;
+        public int detectionHeight = 10;
+        public int hayDetectionHeight = 25;  // New: Increased detection range when hay bale is present
+        public double baseBoost = 0.3;
+        public double hayBoost = 0.5;
+        public double distanceMultiplierClose = 0.8;  // 0-5 blocks
+        public double distanceMultiplierMedium = 0.6; // 5-10 blocks
+        public double distanceMultiplierFar = 0.4;    // 10+ blocks
+        public int boostCooldownTicks = 0; // 0 = no cooldown
     }
 
-    // Save configuration to file
-    public void save() {
-        try (Writer writer = new FileWriter(CONFIG_PATH.toFile())) {
-            GSON.toJson(this, writer);
-        } catch (IOException e) {
-            System.err.println("Failed to save config file!");
+    public static class SoulFireConfig {
+        public boolean enabled = true;
+        public int detectionHeight = 10;
+        public int hayDetectionHeight = 25;  // New: Increased detection range when hay bale is present
+        public double basePull = 0.3;
+        public double hayPull = 0.5;
+    }
+
+    public static class MechanicsConfig {
+        public boolean disableFireworks = true;
+        public double minHorizontalVelocity = 0.1;
+    }
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("niuhi-elytra.json").toFile();
+
+    public static ModConfig load() {
+        ModConfig config = new ModConfig();
+
+        // Create default config if it doesn't exist
+        if (!CONFIG_FILE.exists()) {
+            save(config);
+            return config;
         }
+
+        // Load existing config
+        try (FileReader reader = new FileReader(CONFIG_FILE)) {
+            config = GSON.fromJson(reader, ModConfig.class);
+        } catch (IOException e) {
+            System.err.println("Error loading config: " + e.getMessage());
+            save(config); // Save default config if loading fails
+        }
+
+        return config;
+    }
+
+    public static void save(ModConfig config) {
+        try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
+            GSON.toJson(config, writer);
+        } catch (IOException e) {
+            System.err.println("Error saving config: " + e.getMessage());
+        }
+    }
+
+    // Add an instance method for convenience
+    public void save() {
+        ModConfig.save(this);
     }
 }
