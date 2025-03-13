@@ -21,6 +21,7 @@ public class SoulFireHandler {
      * @param player The player to process
      */
     public void processTick(ServerPlayerEntity player) {
+        // Check if both soul fire and fires in general are enabled
         if (!config.soulFire.enabled) return;
 
         applySoulCampfirePull(player);

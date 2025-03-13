@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ElytraMod implements ModInitializer {
-	public static final String MOD_ID = "elytra-mod";
+	public static final String MOD_ID = "elytra-revamped";
 	public static final ModConfig CONFIG = ModConfig.load();
 
 	// This logger is used to write text to the console and the log file.
@@ -21,9 +21,8 @@ public class ElytraMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		LOGGER.info("Elytra Boost Mod is loading...");
+		LOGGER.info("Elytra Revamped is loading...");
 		ModEvents.register();
-		LOGGER.info("Mod Testing");
-		ModConfig.save(CONFIG); // Fixed: Call the static save method with CONFIG as the parameter
+		ModConfig.save(CONFIG);
 	}
 }

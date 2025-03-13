@@ -43,7 +43,7 @@ public class ModConfig {
     }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("niuhi-elytra.json").toFile();
+    private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("Elytra_Revamped.json").toFile();
 
     public static ModConfig load() {
         ModConfig config = new ModConfig();
@@ -71,10 +71,5 @@ public class ModConfig {
         } catch (IOException e) {
             System.err.println("Error saving config: " + e.getMessage());
         }
-    }
-
-    // Add an instance method for convenience
-    public void save() {
-        ModConfig.save(this);
     }
 }

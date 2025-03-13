@@ -21,7 +21,7 @@ public class FireBoostHandler {
     }
 
     /**
-     * Process tick for fire boost features
+     * Process tick for campfire boost features
      * @param player The player to process
      */
     public void processTick(ServerPlayerEntity player) {
@@ -36,7 +36,7 @@ public class FireBoostHandler {
             }
         }
 
-        if (isAboveFire(player)) {
+        if (isAboveCampfire(player)) {
             applyBoostIfEligible(player);
         }
     }
@@ -76,11 +76,11 @@ public class FireBoostHandler {
     }
 
     /**
-     * Checks if the player is above a fire source
+     * Checks if the player is above a campfire
      * @param player The player to check
-     * @return true if player is above fire
+     * @return true if player is above campfire
      */
-    private boolean isAboveFire(ServerPlayerEntity player) {
+    private boolean isAboveCampfire(ServerPlayerEntity player) {
         ServerWorld world = player.getServerWorld();
         BlockPos playerPos = player.getBlockPos();
 
@@ -100,14 +100,14 @@ public class FireBoostHandler {
                 config.fireBoost.hayDetectionHeight :
                 config.fireBoost.detectionHeight;
 
-        // Now check for fire sources within the determined range
+        // Now check for campfires within the determined range
         for (int y = 0; y <= maxDetectionHeight; y++) {
             BlockPos checkPos = playerPos.down(y);
             BlockState blockState = world.getBlockState(checkPos);
 
             FireType fireType = FireType.fromState(blockState);
             if (fireType != null && !fireType.isSoulFire()) {
-                boolean isLit = !blockState.contains(CampfireBlock.LIT) || blockState.get(CampfireBlock.LIT);
+                boolean isLit = blockState.contains(CampfireBlock.LIT) && blockState.get(CampfireBlock.LIT);
                 if (isLit) {
                     return true;
                 }
@@ -145,14 +145,14 @@ public class FireBoostHandler {
                 config.fireBoost.hayDetectionHeight :
                 config.fireBoost.detectionHeight;
 
-        // Find the first valid fire source
+        // Find the first valid campfire
         for (int y = 0; y <= maxDetectionHeight; y++) {
             BlockPos checkPos = playerPos.down(y);
             BlockState blockState = world.getBlockState(checkPos);
 
             FireType fireType = FireType.fromState(blockState);
             if (fireType != null && !fireType.isSoulFire()) {
-                boolean isLit = !blockState.contains(CampfireBlock.LIT) || blockState.get(CampfireBlock.LIT);
+                boolean isLit = blockState.contains(CampfireBlock.LIT) && blockState.get(CampfireBlock.LIT);
                 boolean directHayBale = world.getBlockState(checkPos.down()).isOf(Blocks.HAY_BLOCK);
 
                 if (isLit) {
