@@ -20,21 +20,21 @@ public class ModConfig {
     public static class FireBoostConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
-        public int hayDetectionHeight = 25;  // New: Increased detection range when hay bale is present
+        public int hayDetectionHeight = 25;  // Increased detection range when hay bale is present
         public double baseBoost = 0.3;
         public double hayBoost = 0.5;
-        public double distanceMultiplierClose = 0.8;  // 0-5 blocks
-        public double distanceMultiplierMedium = 0.6; // 5-10 blocks
-        public double distanceMultiplierFar = 0.4;    // 10+ blocks
-        public int boostCooldownTicks = 0; // 0 = no cooldown
+        public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
+        public int boostCooldownTicks = 20; // 0 = no cooldown  - 20 = 1 Sec
     }
 
     public static class SoulFireConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
-        public int hayDetectionHeight = 25;  // New: Increased detection range when hay bale is present
+        public int hayDetectionHeight = 25;  // Increased detection range when hay bale is present
         public double basePull = 0.3;
         public double hayPull = 0.5;
+        public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
+        public int pullCooldownTicks = 20; // 0 = no cooldown - 20 = 1 Sec
     }
 
     public static class MechanicsConfig {

@@ -9,8 +9,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SoulFireHandler {
     private final ModConfig config;
+    private final Map<ServerPlayerEntity, Integer> pulledPlayers = new HashMap<>(); // Track players and their cooldowns
 
     public SoulFireHandler(ModConfig config) {
         this.config = config;
@@ -21,10 +25,27 @@ public class SoulFireHandler {
      * @param player The player to process
      */
     public void processTick(ServerPlayerEntity player) {
-        // Check if both soul fire and fires in general are enabled
+        // Check if soul fire is enabled
         if (!config.soulFire.enabled) return;
 
+        // Update cooldowns
+        if (pulledPlayers.containsKey(player)) {
+            int remainingCooldown = pulledPlayers.get(player);
+            if (remainingCooldown > 0) {
+                pulledPlayers.put(player, remainingCooldown - 1);
+                return; // Skip processing if still on cooldown
+            }
+        }
+
         applySoulCampfirePull(player);
+    }
+
+    /**
+     * Reset player state when they stop flying
+     * @param player The player to reset
+     */
+    public void resetPlayer(ServerPlayerEntity player) {
+        pulledPlayers.remove(player);
     }
 
     /**
@@ -58,6 +79,11 @@ public class SoulFireHandler {
      * @param player The player to apply pull to
      */
     private void applySoulCampfirePull(ServerPlayerEntity player) {
+        // If the player is still on cooldown, don't apply pull
+        if (pulledPlayers.containsKey(player) && pulledPlayers.get(player) > 0) {
+            return;
+        }
+
         ServerWorld world = player.getServerWorld();
         BlockPos playerPos = player.getBlockPos();
 
@@ -88,6 +114,24 @@ public class SoulFireHandler {
                     // Check if there's hay directly below and apply appropriate pull
                     boolean directHayBale = world.getBlockState(checkPos.down()).isOf(Blocks.HAY_BLOCK);
                     double pullAmount = directHayBale ? config.soulFire.hayPull : config.soulFire.basePull;
+
+                    // Apply automatic scaling based on height if enabled
+                    if (config.soulFire.autoScaleWithHeight) {
+                        double distance = player.getY() - checkPos.getY();
+                        double maxHeight = maxDetectionHeight;
+                        // Calculate scale factor based on height (1.0 at close range, scaling down to 0.3 at max height)
+                        double scaleFactor = 1.0 - (0.7 * (distance / maxHeight));
+                        // Ensure scale factor is within reasonable bounds
+                        scaleFactor = Math.min(1.0, Math.max(0.3, scaleFactor));
+                        pullAmount *= scaleFactor;
+                    }
+
+                    // Set cooldown if configured
+                    if (config.soulFire.pullCooldownTicks > 0) {
+                        pulledPlayers.put(player, config.soulFire.pullCooldownTicks);
+                    } else {
+                        pulledPlayers.put(player, 0); // Just mark as pulled with no cooldown
+                    }
 
                     applyPull(player, pullAmount);
                     return;

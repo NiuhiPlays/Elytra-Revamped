@@ -156,17 +156,18 @@ public class FireBoostHandler {
                 boolean directHayBale = world.getBlockState(checkPos.down()).isOf(Blocks.HAY_BLOCK);
 
                 if (isLit) {
-                    // Determine base boost amount
+                    // Determine base boost amount based on hay bale presence
                     boostAmount = directHayBale ? config.fireBoost.hayBoost : config.fireBoost.baseBoost;
 
-                    // Apply distance modifier
-                    double distance = player.getY() - checkPos.getY();
-                    if (distance < 5) {
-                        boostAmount *= config.fireBoost.distanceMultiplierClose;
-                    } else if (distance >= 5 && distance < 10) {
-                        boostAmount *= config.fireBoost.distanceMultiplierMedium;
-                    } else {
-                        boostAmount *= config.fireBoost.distanceMultiplierFar;
+                    // Apply automatic scaling based on height if enabled
+                    if (config.fireBoost.autoScaleWithHeight) {
+                        double distance = player.getY() - checkPos.getY();
+                        double maxHeight = maxDetectionHeight;
+                        // Calculate scale factor based on height (1.0 at close range, scaling down to 0.3 at max height)
+                        double scaleFactor = 1.0 - (0.7 * (distance / maxHeight));
+                        // Ensure scale factor is within reasonable bounds
+                        scaleFactor = Math.min(1.0, Math.max(0.3, scaleFactor));
+                        boostAmount *= scaleFactor;
                     }
 
                     // Set cooldown if configured

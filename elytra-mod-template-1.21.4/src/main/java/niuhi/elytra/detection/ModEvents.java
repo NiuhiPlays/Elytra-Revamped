@@ -28,6 +28,7 @@ public class ModEvents {
                     soulFireHandler.processTick(player);
                 } else {
                     fireBoostHandler.resetPlayer(player);
+                    soulFireHandler.resetPlayer(player); // Added to reset soul fire player state
                 }
             }
         });
