@@ -41,6 +41,7 @@ public class ModConfig {
 
     public static class MechanicsConfig {
         public boolean disableFireworks = true;
+        public boolean enableFireworkSmoke = true; // New option for firework smoke effect
         public double minHorizontalVelocity = 0.1;
     }
 

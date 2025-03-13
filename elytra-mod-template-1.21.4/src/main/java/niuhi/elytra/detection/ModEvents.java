@@ -14,6 +14,7 @@ public class ModEvents {
     private static final FeedbackHandler feedbackHandler = new FeedbackHandler(config);
     private static final FireBoostHandler fireBoostHandler = new FireBoostHandler(config, feedbackHandler);
     private static final SoulFireHandler soulFireHandler = new SoulFireHandler(config, feedbackHandler);
+    private static final FireworkSmokeHandler fireworkSmokeHandler = new FireworkSmokeHandler(config);
 
     public static void register() {
         // Register firework prevention event if enabled in config
@@ -23,6 +24,9 @@ public class ModEvents {
 
         // Register tick event for boost handlers
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // Process smoke effects every tick
+            fireworkSmokeHandler.processTick();
+
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 if (flightDetector.isFlying(player)) {
                     fireBoostHandler.processTick(player);
@@ -30,6 +34,7 @@ public class ModEvents {
                 } else {
                     fireBoostHandler.resetPlayer(player);
                     soulFireHandler.resetPlayer(player);
+                    fireworkSmokeHandler.resetPlayer(player); // Clear smoke effects when player stops flying
                 }
             }
         });
@@ -44,6 +49,9 @@ public class ModEvents {
                 ItemStack itemStack = player.getStackInHand(hand);
 
                 if (flightDetector.isFlying(serverPlayer) && itemStack.isOf(Items.FIREWORK_ROCKET)) {
+                    // Start smoke effect when firework use is prevented
+                    fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
+
                     return ActionResult.FAIL; // Block firework use
                 }
             }
