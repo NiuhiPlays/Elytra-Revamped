@@ -11,8 +11,9 @@ import net.minecraft.util.ActionResult;
 public class ModEvents {
     private static final ModConfig config = ModConfig.load();
     private static final ElytraFlightDetector flightDetector = new ElytraFlightDetector(config);
-    private static final FireBoostHandler fireBoostHandler = new FireBoostHandler(config);
-    private static final SoulFireHandler soulFireHandler = new SoulFireHandler(config);
+    private static final FeedbackHandler feedbackHandler = new FeedbackHandler(config);
+    private static final FireBoostHandler fireBoostHandler = new FireBoostHandler(config, feedbackHandler);
+    private static final SoulFireHandler soulFireHandler = new SoulFireHandler(config, feedbackHandler);
 
     public static void register() {
         // Register firework prevention event if enabled in config
@@ -28,7 +29,7 @@ public class ModEvents {
                     soulFireHandler.processTick(player);
                 } else {
                     fireBoostHandler.resetPlayer(player);
-                    soulFireHandler.resetPlayer(player); // Added to reset soul fire player state
+                    soulFireHandler.resetPlayer(player);
                 }
             }
         });

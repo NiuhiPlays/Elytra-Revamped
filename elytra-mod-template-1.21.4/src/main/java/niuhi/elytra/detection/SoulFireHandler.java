@@ -14,10 +14,12 @@ import java.util.Map;
 
 public class SoulFireHandler {
     private final ModConfig config;
+    private final FeedbackHandler feedbackHandler;
     private final Map<ServerPlayerEntity, Integer> pulledPlayers = new HashMap<>(); // Track players and their cooldowns
 
-    public SoulFireHandler(ModConfig config) {
+    public SoulFireHandler(ModConfig config, FeedbackHandler feedbackHandler) {
         this.config = config;
+        this.feedbackHandler = feedbackHandler;
     }
 
     /**
@@ -134,6 +136,9 @@ public class SoulFireHandler {
                     }
 
                     applyPull(player, pullAmount);
+
+                    // Play feedback effects
+                    feedbackHandler.playSoulFirePullFeedback(player);
                     return;
                 }
             }

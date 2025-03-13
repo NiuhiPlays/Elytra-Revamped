@@ -16,6 +16,8 @@ public class ModConfig {
     public SoulFireConfig soulFire = new SoulFireConfig();
     // General mechanics configuration
     public MechanicsConfig mechanics = new MechanicsConfig();
+    // Feedback configuration
+    public FeedbackConfig feedback = new FeedbackConfig();
 
     public static class FireBoostConfig {
         public boolean enabled = true;
@@ -24,7 +26,7 @@ public class ModConfig {
         public double baseBoost = 0.3;
         public double hayBoost = 0.5;
         public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
-        public int boostCooldownTicks = 20; // 0 = no cooldown  - 20 = 1 Sec
+        public int boostCooldownTicks = 0; // 0 = no cooldown  - 20 = 1 Sec
     }
 
     public static class SoulFireConfig {
@@ -34,12 +36,19 @@ public class ModConfig {
         public double basePull = 0.3;
         public double hayPull = 0.5;
         public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
-        public int pullCooldownTicks = 20; // 0 = no cooldown - 20 = 1 Sec
+        public int pullCooldownTicks = 0; // 0 = no cooldown - 20 = 1 Sec
     }
 
     public static class MechanicsConfig {
         public boolean disableFireworks = true;
         public double minHorizontalVelocity = 0.1;
+    }
+
+    public static class FeedbackConfig {
+        public boolean enableParticles = true;
+        public boolean enableSounds = true;
+        public float soundVolume = 0.5f;
+        public float soundPitch = 1.0f;
     }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

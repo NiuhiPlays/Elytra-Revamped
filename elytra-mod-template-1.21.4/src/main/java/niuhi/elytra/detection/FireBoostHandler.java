@@ -14,10 +14,12 @@ import java.util.Map;
 
 public class FireBoostHandler {
     private final ModConfig config;
+    private final FeedbackHandler feedbackHandler;
     private final Map<ServerPlayerEntity, Integer> boostedPlayers = new HashMap<>(); // Track boosted players and their cooldowns
 
-    public FireBoostHandler(ModConfig config) {
+    public FireBoostHandler(ModConfig config, FeedbackHandler feedbackHandler) {
         this.config = config;
+        this.feedbackHandler = feedbackHandler;
     }
 
     /**
@@ -184,6 +186,9 @@ public class FireBoostHandler {
         // Apply the boost if found
         if (boostAmount > 0) {
             applyBoost(player, boostAmount);
+
+            // Play feedback effects
+            feedbackHandler.playFireBoostFeedback(player);
         }
     }
 
