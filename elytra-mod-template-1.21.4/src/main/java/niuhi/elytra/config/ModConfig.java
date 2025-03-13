@@ -18,6 +18,8 @@ public class ModConfig {
     public MechanicsConfig mechanics = new MechanicsConfig();
     // Feedback configuration
     public FeedbackConfig feedback = new FeedbackConfig();
+    // Drag configuration
+    public DragConfig drag = new DragConfig();
 
     public static class FireBoostConfig {
         public boolean enabled = true;
@@ -50,6 +52,12 @@ public class ModConfig {
         public boolean enableSounds = true;
         public float soundVolume = 0.5f;
         public float soundPitch = 1.0f;
+    }
+
+    public static class DragConfig {
+        public boolean enabled = true;
+        public double dragFactor = 0.92; // Values closer to 0 = more drag, 1.0 = no drag
+        public boolean requireSneaking = true;
     }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

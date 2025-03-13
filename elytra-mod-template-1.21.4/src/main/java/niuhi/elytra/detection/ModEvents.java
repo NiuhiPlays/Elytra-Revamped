@@ -15,6 +15,7 @@ public class ModEvents {
     private static final FireBoostHandler fireBoostHandler = new FireBoostHandler(config, feedbackHandler);
     private static final SoulFireHandler soulFireHandler = new SoulFireHandler(config, feedbackHandler);
     private static final FireworkSmokeHandler fireworkSmokeHandler = new FireworkSmokeHandler(config);
+    private static final DragHandler dragHandler = new DragHandler(config, feedbackHandler);
 
     public static void register() {
         // Register firework prevention event if enabled in config
@@ -31,6 +32,7 @@ public class ModEvents {
                 if (flightDetector.isFlying(player)) {
                     fireBoostHandler.processTick(player);
                     soulFireHandler.processTick(player);
+                    dragHandler.processTick(player);
                 } else {
                     fireBoostHandler.resetPlayer(player);
                     soulFireHandler.resetPlayer(player);
