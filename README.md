@@ -30,3 +30,6 @@ Planned Features include:
 YACL support for easier configuration.  
 Debug mode.  
 Optional client-side visual effects such as colored smoke trails and animated drag.  
+
+Modrinth link:  
+https://modrinth.com/mod/elytra-revamped  
