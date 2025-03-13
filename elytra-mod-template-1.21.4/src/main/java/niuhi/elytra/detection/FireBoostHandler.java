@@ -27,7 +27,7 @@ public class FireBoostHandler {
      * @param player The player to process
      */
     public void processTick(ServerPlayerEntity player) {
-        if (!config.fireBoost.enabled) return;
+        if (!config.campFire.enabled) return;
 
         // Update cooldowns
         if (boostedPlayers.containsKey(player)) {
@@ -89,7 +89,7 @@ public class FireBoostHandler {
         // First, check if there are hay bales in the detection area
         // This determines our detection height
         boolean hasHayBale = false;
-        for (int y = 0; y <= Math.max(config.fireBoost.detectionHeight, config.fireBoost.hayDetectionHeight); y++) {
+        for (int y = 0; y <= Math.max(config.campFire.hayDetectionHeight, config.campFire.detectionHeight); y++) {
             BlockPos checkPos = playerPos.down(y);
             if (hasHayBaleUnderneathArea(world, checkPos)) {
                 hasHayBale = true;
@@ -99,8 +99,8 @@ public class FireBoostHandler {
 
         // Determine maximum detection height based on hay bale presence
         int maxDetectionHeight = hasHayBale ?
-                config.fireBoost.hayDetectionHeight :
-                config.fireBoost.detectionHeight;
+                config.campFire.hayDetectionHeight :
+                config.campFire.detectionHeight;
 
         // Now check for campfires within the determined range
         for (int y = 0; y <= maxDetectionHeight; y++) {
@@ -134,7 +134,7 @@ public class FireBoostHandler {
 
         // First determine if hay detection should be used
         boolean hasHayInArea = false;
-        for (int y = 0; y <= Math.max(config.fireBoost.detectionHeight, config.fireBoost.hayDetectionHeight); y++) {
+        for (int y = 0; y <= Math.max(config.campFire.detectionHeight, config.campFire.hayDetectionHeight); y++) {
             BlockPos checkPos = playerPos.down(y);
             if (hasHayBaleUnderneathArea(world, checkPos)) {
                 hasHayInArea = true;
@@ -144,8 +144,8 @@ public class FireBoostHandler {
 
         // Determine max detection height
         int maxDetectionHeight = hasHayInArea ?
-                config.fireBoost.hayDetectionHeight :
-                config.fireBoost.detectionHeight;
+                config.campFire.hayDetectionHeight :
+                config.campFire.detectionHeight;
 
         // Find the first valid campfire
         for (int y = 0; y <= maxDetectionHeight; y++) {
@@ -159,10 +159,10 @@ public class FireBoostHandler {
 
                 if (isLit) {
                     // Determine base boost amount based on hay bale presence
-                    boostAmount = directHayBale ? config.fireBoost.hayBoost : config.fireBoost.baseBoost;
+                    boostAmount = directHayBale ? config.campFire.hayBoost : config.campFire.baseBoost;
 
                     // Apply automatic scaling based on height if enabled
-                    if (config.fireBoost.autoScaleWithHeight) {
+                    if (config.campFire.autoScaleWithHeight) {
                         double distance = player.getY() - checkPos.getY();
                         double maxHeight = maxDetectionHeight;
                         // Calculate scale factor based on height (1.0 at close range, scaling down to 0.3 at max height)
@@ -173,8 +173,8 @@ public class FireBoostHandler {
                     }
 
                     // Set cooldown if configured
-                    if (config.fireBoost.boostCooldownTicks > 0) {
-                        boostedPlayers.put(player, config.fireBoost.boostCooldownTicks);
+                    if (config.campFire.boostCooldownTicks > 0) {
+                        boostedPlayers.put(player, config.campFire.boostCooldownTicks);
                     } else {
                         boostedPlayers.put(player, 0); // Just mark as boosted with no cooldown
                     }

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ModConfig {
     // Fire boost configuration
-    public FireBoostConfig fireBoost = new FireBoostConfig();
+    public CampFireConfig campFire = new CampFireConfig();
     // Soul fire configuration
     public SoulFireConfig soulFire = new SoulFireConfig();
     // General mechanics configuration
@@ -21,7 +21,7 @@ public class ModConfig {
     // Drag configuration
     public DragConfig drag = new DragConfig();
 
-    public static class FireBoostConfig {
+    public static class CampFireConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
         public int hayDetectionHeight = 25;  // Increased detection range when hay bale is present
