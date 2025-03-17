@@ -12,11 +12,9 @@ import niuhi.elytra.config.ModConfig;
 public class DragHandler {
     private final ModConfig config;
     private final Random random = Random.create();
-    private final FeedbackHandler feedbackHandler;
 
     public DragHandler(ModConfig config, FeedbackHandler feedbackHandler) {
         this.config = config;
-        this.feedbackHandler = feedbackHandler;
     }
 
     /**

@@ -120,20 +120,16 @@ public class SoulFireHandler {
                     // Apply automatic scaling based on height if enabled
                     if (config.soulFire.autoScaleWithHeight) {
                         double distance = player.getY() - checkPos.getY();
-                        double maxHeight = maxDetectionHeight;
                         // Calculate scale factor based on height (1.0 at close range, scaling down to 0.3 at max height)
-                        double scaleFactor = 1.0 - (0.7 * (distance / maxHeight));
+                        double scaleFactor = 1.0 - (0.7 * (distance / (double) maxDetectionHeight));
                         // Ensure scale factor is within reasonable bounds
                         scaleFactor = Math.min(1.0, Math.max(0.3, scaleFactor));
                         pullAmount *= scaleFactor;
                     }
 
                     // Set cooldown if configured
-                    if (config.soulFire.pullCooldownTicks > 0) {
-                        pulledPlayers.put(player, config.soulFire.pullCooldownTicks);
-                    } else {
-                        pulledPlayers.put(player, 0); // Just mark as pulled with no cooldown
-                    }
+                    // Just mark as pulled with no cooldown
+                    pulledPlayers.put(player, Math.max(config.soulFire.pullCooldownTicks, 0));
 
                     applyPull(player, pullAmount);
 
