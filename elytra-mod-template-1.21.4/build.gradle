@@ -40,7 +40,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Accessories.
-	modImplementation("io.wispforest:accessories-fabric:1.2.19-beta+1.21.4")
+	modCompileOnly "io.wispforest:accessories-fabric:1.2.19-beta+1.21.4"
 }
 
 processResources {

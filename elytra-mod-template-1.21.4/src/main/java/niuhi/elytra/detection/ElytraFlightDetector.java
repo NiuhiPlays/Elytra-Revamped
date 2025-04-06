@@ -36,8 +36,13 @@ public class ElytraFlightDetector {
     public boolean isWearingElytra(ServerPlayerEntity player) {
         boolean hasElytra = player.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.ELYTRA);
 
-        if (accessoriesLoaded){
-            return hasElytra || Accessories.hasElytraAccessories(player);
+        if (accessoriesLoaded) {
+            try {
+                return hasElytra || Accessories.hasElytraAccessories(player);
+            } catch (Exception e) {
+                // Fallback to vanilla behavior if anything goes wrong
+                return hasElytra;
+            }
         }
 
         return hasElytra;
