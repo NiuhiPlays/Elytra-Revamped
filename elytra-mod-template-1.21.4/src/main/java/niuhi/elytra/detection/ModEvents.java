@@ -17,6 +17,7 @@ public class ModEvents {
     private static final SoulFireHandler soulFireHandler = new SoulFireHandler(config, feedbackHandler);
     private static final FireworkSmokeHandler fireworkSmokeHandler = new FireworkSmokeHandler(config);
     private static final DragHandler dragHandler = new DragHandler(config, feedbackHandler);
+    private static final InitialFlightHandler initialFlightHandler = new InitialFlightHandler(config);
 
     public static void register() {
         registerFireworkPrevention();
@@ -27,8 +28,14 @@ public class ModEvents {
                 return;
             }
             fireworkSmokeHandler.processTick();
+
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                if (flightDetector.isFlying(player)) {
+                // Always process the initial flight handler to track flight duration
+                initialFlightHandler.processTick(player);
+
+                boolean isCurrentlyFlying = flightDetector.isFlying(player);
+
+                if (isCurrentlyFlying) {
                     fireBoostHandler.processTick(player);
                     soulFireHandler.processTick(player);
                     dragHandler.processTick(player);
@@ -36,6 +43,8 @@ public class ModEvents {
                     fireBoostHandler.resetPlayer(player);
                     soulFireHandler.resetPlayer(player);
                     fireworkSmokeHandler.resetPlayer(player);
+                    // Reset initial flight handler when player has stopped gliding
+                    initialFlightHandler.resetPlayer(player);
                 }
             }
         });
@@ -46,8 +55,17 @@ public class ModEvents {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 ItemStack itemStack = player.getStackInHand(hand);
                 if (config != null && config.mechanics.disableFireworks &&
-                        flightDetector.isFlying(serverPlayer) &&
+                        player.isGliding() &&  // Use vanilla's isFallFlying to be extra safe
                         itemStack.isOf(Items.FIREWORK_ROCKET)) {
+
+                    // Check if this is their initial firework use
+                    if (initialFlightHandler.canUseInitialFirework(serverPlayer)) {
+                        // Let this firework use pass through
+                        initialFlightHandler.markInitialFireworkUsed(serverPlayer);
+                        return ActionResult.PASS;
+                    }
+
+                    // Otherwise, show smoke effect
                     fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
                     return ActionResult.FAIL;
                 }
