@@ -22,7 +22,7 @@
 			"niuhi.elytra.ElytraModClient"
 		],
 		"modmenu": [
-			"niuhi.elytra.ElytraModClient"
+			"niuhi.elytra.config.ModMenu"
 		]
 	},
 	"mixins": [

@@ -1,5 +1,6 @@
 package niuhi.elytra.detection;
 
+import niuhi.elytra.ElytraMod;
 import niuhi.elytra.config.ModConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -18,10 +19,13 @@ public class ModEvents {
     private static final DragHandler dragHandler = new DragHandler(config, feedbackHandler);
 
     public static void register() {
-        // Always register firework prevention, but check config dynamically
         registerFireworkPrevention();
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if (config == null) {
+                ElytraMod.LOGGER.error("Config is null in ModEvents tick handler!");
+                return;
+            }
             fireworkSmokeHandler.processTick();
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 if (flightDetector.isFlying(player)) {
@@ -41,8 +45,7 @@ public class ModEvents {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 ItemStack itemStack = player.getStackInHand(hand);
-                // Check config dynamically here
-                if (config.mechanics.disableFireworks &&
+                if (config != null && config.mechanics.disableFireworks &&
                         flightDetector.isFlying(serverPlayer) &&
                         itemStack.isOf(Items.FIREWORK_ROCKET)) {
                     fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);

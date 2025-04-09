@@ -27,7 +27,7 @@ public class FireBoostHandler {
      * @param player The player to process
      */
     public void processTick(ServerPlayerEntity player) {
-        if (!config.campFire.enabled) return;
+        if (config == null || !config.mechanics.enableFireworkSmoke) return;
 
         // Update cooldowns
         if (boostedPlayers.containsKey(player)) {
