@@ -38,7 +38,6 @@ public class ModConfig {
     public static class MechanicsConfig {
         public boolean disableFireworks = true;
         public boolean enableFireworkSmoke = true;
-        public double minHorizontalVelocity = 0.1;
         public boolean allowInitialFirework = false;
         public int initialFireworkGraceTicks = 20;
     }
@@ -53,7 +52,6 @@ public class ModConfig {
     public static class DragConfig {
         public boolean enabled = true;
         public double dragFactor = 0.92;
-        public boolean requireSneaking = true;
     }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

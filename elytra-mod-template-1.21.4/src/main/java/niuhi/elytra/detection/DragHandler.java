@@ -24,7 +24,7 @@ public class DragHandler {
     public void processTick(ServerPlayerEntity player) {
         if (!config.drag.enabled) return;
 
-        if (!config.drag.requireSneaking || player.isSneaking()) {
+        if (player.isSneaking()) {
             applyDrag(player);
             playDragFeedback(player);
         }

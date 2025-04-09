@@ -25,7 +25,7 @@ public class ElytraFlightDetector {
         return isWearingElytra(player)
                 && !player.isOnGround()
                 && (player.getVelocity().y != 0 ||
-                Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().z) > config.mechanics.minHorizontalVelocity);
+                Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().z) > 0.1);
     }
 
     /**
