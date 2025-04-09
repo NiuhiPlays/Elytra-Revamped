@@ -18,16 +18,11 @@ public class ModEvents {
     private static final DragHandler dragHandler = new DragHandler(config, feedbackHandler);
 
     public static void register() {
-        // Register firework prevention event if enabled in config
-        if (config.mechanics.disableFireworks) {
-            registerFireworkPrevention();
-        }
+        // Always register firework prevention, but check config dynamically
+        registerFireworkPrevention();
 
-        // Register tick event for boost handlers
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            // Process smoke effects every tick
             fireworkSmokeHandler.processTick();
-
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 if (flightDetector.isFlying(player)) {
                     fireBoostHandler.processTick(player);
@@ -36,28 +31,25 @@ public class ModEvents {
                 } else {
                     fireBoostHandler.resetPlayer(player);
                     soulFireHandler.resetPlayer(player);
-                    fireworkSmokeHandler.resetPlayer(player); // Clear smoke effects when player stops flying
+                    fireworkSmokeHandler.resetPlayer(player);
                 }
             }
         });
     }
 
-    /**
-     * Registers the event handler for preventing firework use while flying
-     */
     private static void registerFireworkPrevention() {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 ItemStack itemStack = player.getStackInHand(hand);
-
-                if (flightDetector.isFlying(serverPlayer) && itemStack.isOf(Items.FIREWORK_ROCKET)) {
-                    // Start smoke effect when firework use is prevented
+                // Check config dynamically here
+                if (config.mechanics.disableFireworks &&
+                        flightDetector.isFlying(serverPlayer) &&
+                        itemStack.isOf(Items.FIREWORK_ROCKET)) {
                     fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
-
-                    return ActionResult.FAIL; // Block firework use
+                    return ActionResult.FAIL;
                 }
             }
-            return ActionResult.PASS; // Allow normal use otherwise
+            return ActionResult.PASS;
         });
     }
 }

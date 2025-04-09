@@ -2,8 +2,6 @@ package niuhi.elytra.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.isxander.yacl3.api.ConfigCategory; // For reference, not used here directly
-import dev.isxander.yacl3.config.ConfigEntry;
 import net.fabricmc.loader.api.FabricLoader;
 import niuhi.elytra.ElytraMod;
 

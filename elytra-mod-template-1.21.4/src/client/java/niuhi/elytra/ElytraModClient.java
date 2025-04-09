@@ -24,7 +24,7 @@ public class ElytraModClient implements ClientModInitializer, ModMenuApi {
 				@Override
 				protected void init() {
 					this.addDrawableChild(ButtonWidget.builder(
-									Text.literal("YACL Not Installed"),
+									Text.literal("YACL Not Installed, Use Json File"),
 									button -> this.close()
 							)
 							.position(this.width / 2 - 100, this.height / 2)
