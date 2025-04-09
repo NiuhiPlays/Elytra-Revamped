@@ -45,7 +45,7 @@ public class Accessories {
         } catch (Exception e) {
             // Only log once to avoid spam
             if (!hasWarned) {
-                LOGGER.error("Error checking for elytra accessories: " + e.getMessage());
+                LOGGER.error("Error checking for elytra accessories: {}", e.getMessage());
                 hasWarned = true;
             }
             return false;

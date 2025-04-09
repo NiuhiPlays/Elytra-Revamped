@@ -41,10 +41,9 @@ public class ElytraFlightDetector {
                 return hasElytra || Accessories.hasElytraAccessories(player);
             } catch (Exception e) {
                 // Fallback to vanilla behavior if anything goes wrong
-                return hasElytra;
+                return false;
             }
         }
-
         return hasElytra;
     }
 }
