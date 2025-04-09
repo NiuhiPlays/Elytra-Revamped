@@ -21,13 +21,8 @@ public class Accessories {
      */
     public static boolean hasElytraAccessories(ServerPlayerEntity player) {
         try {
-            // Direct API access using the normal import
-            // This code will only execute if the Accessories mod is present
-            // Otherwise, it will throw a ClassNotFoundException and fall back to the catch block
             Class.forName("io.wispforest.accessories.api.AccessoriesCapability");
 
-            // Since the class exists, we can access the API directly
-            // This avoids the reflection issues with obfuscated method parameters
             var capability = io.wispforest.accessories.api.AccessoriesCapability.get(player);
             if (capability == null) {
                 return false;

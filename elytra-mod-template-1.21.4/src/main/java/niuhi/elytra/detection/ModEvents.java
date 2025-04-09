@@ -30,7 +30,6 @@ public class ModEvents {
             fireworkSmokeHandler.processTick();
 
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                // Always process the initial flight handler to track flight duration
                 initialFlightHandler.processTick(player);
 
                 boolean isCurrentlyFlying = flightDetector.isFlying(player);
@@ -43,7 +42,6 @@ public class ModEvents {
                     fireBoostHandler.resetPlayer(player);
                     soulFireHandler.resetPlayer(player);
                     fireworkSmokeHandler.resetPlayer(player);
-                    // Reset initial flight handler when player has stopped gliding
                     initialFlightHandler.resetPlayer(player);
                 }
             }
@@ -55,7 +53,7 @@ public class ModEvents {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 ItemStack itemStack = player.getStackInHand(hand);
                 if (config != null && config.mechanics.disableFireworks &&
-                        player.isGliding() &&  // Use vanilla's isFallFlying to be extra safe
+                        player.isGliding() &&
                         itemStack.isOf(Items.FIREWORK_ROCKET)) {
 
                     // Check if this is their initial firework use
