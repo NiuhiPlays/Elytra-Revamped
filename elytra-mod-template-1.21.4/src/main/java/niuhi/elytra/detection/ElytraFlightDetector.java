@@ -16,23 +16,10 @@ public class ElytraFlightDetector {
         this.accessoriesLoaded = FabricLoader.getInstance().isModLoaded("accessories");
     }
 
-    /**
-     * Determines if a player is actively flying with elytra
-     * @param player The player to check
-     * @return true if the player is flying with elytra
-     */
     public boolean isFlying(ServerPlayerEntity player) {
-        return isWearingElytra(player)
-                && !player.isOnGround()
-                && (player.getVelocity().y != 0 ||
-                Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().z) > 0.1);
+        return player.isGliding() && isWearingElytra(player);
     }
 
-    /**
-     * Checks if the player is wearing an elytra
-     * @param player The player to check
-     * @return true if the player has elytra equipped
-     */
     public boolean isWearingElytra(ServerPlayerEntity player) {
         boolean hasElytra = player.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.ELYTRA);
 
@@ -40,8 +27,7 @@ public class ElytraFlightDetector {
             try {
                 return hasElytra || Accessories.hasElytraAccessories(player);
             } catch (Exception e) {
-                // Fallback to vanilla behavior if anything goes wrong
-                return false;
+                return false; // Fallback to vanilla behavior if Accessories fails
             }
         }
         return hasElytra;
