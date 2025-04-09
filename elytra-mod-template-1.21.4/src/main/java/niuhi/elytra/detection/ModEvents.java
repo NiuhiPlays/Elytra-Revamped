@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
 public class ModEvents {
-    private static final ModConfig config = ModConfig.load();
+    public static final ModConfig config = ModConfig.init();
     private static final ElytraFlightDetector flightDetector = new ElytraFlightDetector(config);
     private static final FeedbackHandler feedbackHandler = new FeedbackHandler(config);
     private static final FireBoostHandler fireBoostHandler = new FireBoostHandler(config, feedbackHandler);

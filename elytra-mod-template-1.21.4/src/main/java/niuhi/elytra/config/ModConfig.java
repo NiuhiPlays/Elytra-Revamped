@@ -2,48 +2,44 @@ package niuhi.elytra.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dev.isxander.yacl3.api.ConfigCategory; // For reference, not used here directly
+import dev.isxander.yacl3.config.ConfigEntry;
 import net.fabricmc.loader.api.FabricLoader;
+import niuhi.elytra.ElytraMod;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.nio.file.Path;
 
 public class ModConfig {
-    // Fire boost configuration
-    public CampFireConfig campFire = new CampFireConfig();
-    // Soul fire configuration
-    public SoulFireConfig soulFire = new SoulFireConfig();
-    // General mechanics configuration
-    public MechanicsConfig mechanics = new MechanicsConfig();
-    // Feedback configuration
-    public FeedbackConfig feedback = new FeedbackConfig();
-    // Drag configuration
-    public DragConfig drag = new DragConfig();
+        public CampFireConfig campFire = new CampFireConfig();
+        public SoulFireConfig soulFire = new SoulFireConfig();
+        public MechanicsConfig mechanics = new MechanicsConfig();
+        public FeedbackConfig feedback = new FeedbackConfig();
+        public DragConfig drag = new DragConfig();
 
     public static class CampFireConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
-        public int hayDetectionHeight = 25;  // Increased detection range when hay bale is present
+        public int hayDetectionHeight = 25;
         public double baseBoost = 0.3;
         public double hayBoost = 0.5;
-        public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
-        public int boostCooldownTicks = 0; // 0 = no cooldown  - 20 = 1 Sec
+        public boolean autoScaleWithHeight = true;
+        public int boostCooldownTicks = 0;
     }
 
     public static class SoulFireConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
-        public int hayDetectionHeight = 25;  // Increased detection range when hay bale is present
+        public int hayDetectionHeight = 25;
         public double basePull = 0.3;
         public double hayPull = 0.5;
-        public boolean autoScaleWithHeight = true;  // Option to enable/disable automatic height scaling
-        public int pullCooldownTicks = 0; // 0 = no cooldown - 20 = 1 Sec
+        public boolean autoScaleWithHeight = true;
+        public int pullCooldownTicks = 0;
     }
 
     public static class MechanicsConfig {
         public boolean disableFireworks = true;
-        public boolean enableFireworkSmoke = true; // New option for firework smoke effect
+        public boolean enableFireworkSmoke = true;
         public double minHorizontalVelocity = 0.1;
     }
 
@@ -56,38 +52,60 @@ public class ModConfig {
 
     public static class DragConfig {
         public boolean enabled = true;
-        public double dragFactor = 0.92; // Values closer to 0 = more drag, 1.0 = no drag
+        public double dragFactor = 0.92;
         public boolean requireSneaking = true;
     }
 
+    // Gson for manual serialization
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("Elytra_Revamped.json").toFile();
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("Elytra_Revamped.json");
+    private static ModConfig INSTANCE;
 
-    public static ModConfig load() {
+    // Initialize the config
+    public static ModConfig init() {
+        if (INSTANCE == null) {
+            if (ElytraMod.YACL_LOADED) {
+                // YACL will handle instantiation via YACLConfigScreen
+                INSTANCE = loadManual(); // Load defaults or existing file initially
+            }
+        }
+        return INSTANCE;
+    }
+
+    // Manual load method (used when YACL is absent or as initial load)
+    private static ModConfig loadManual() {
+        File configFile = CONFIG_PATH.toFile();
+        if (configFile.exists()) {
+            try (java.io.FileReader reader = new java.io.FileReader(configFile)) {
+                return GSON.fromJson(reader, ModConfig.class);
+            } catch (java.io.IOException e) {
+                System.err.println("Error loading config: " + e.getMessage());
+            }
+        }
         ModConfig config = new ModConfig();
-
-        // Create default config if it doesn't exist
-        if (!CONFIG_FILE.exists()) {
-            save(config);
-            return config;
-        }
-
-        // Load existing config
-        try (FileReader reader = new FileReader(CONFIG_FILE)) {
-            config = GSON.fromJson(reader, ModConfig.class);
-        } catch (IOException e) {
-            System.err.println("Error loading config: " + e.getMessage());
-            save(config); // Save default config if loading fails
-        }
-
+        saveManual(config);
         return config;
     }
 
-    public static void save(ModConfig config) {
-        try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
+    // Manual save method (used when YACL is absent)
+    private static void saveManual(ModConfig config) {
+        try (java.io.FileWriter writer = new java.io.FileWriter(CONFIG_PATH.toFile())) {
             GSON.toJson(config, writer);
-        } catch (IOException e) {
+        } catch (java.io.IOException e) {
             System.err.println("Error saving config: " + e.getMessage());
         }
+    }
+
+    // Public save method (uses YACL if available, otherwise manual)
+    public static void save() {
+        if (ElytraMod.YACL_LOADED) {
+            // YACL handles saving via the screen
+        } else {
+            saveManual(INSTANCE);
+        }
+    }
+
+    public static ModConfig getInstance() {
+        return INSTANCE;
     }
 }
