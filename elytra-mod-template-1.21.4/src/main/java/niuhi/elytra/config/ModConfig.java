@@ -39,7 +39,7 @@ public class ModConfig {
         public boolean disableFireworks = true;
         public boolean enableFireworkSmoke = true;
         public double minHorizontalVelocity = 0.1;
-        public boolean allowInitialFirework = true;
+        public boolean allowInitialFirework = false;
         public int initialFireworkGraceTicks = 20;
     }
 

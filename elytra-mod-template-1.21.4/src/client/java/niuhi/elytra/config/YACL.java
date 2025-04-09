@@ -141,7 +141,7 @@ public class YACL {
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Text.literal("Initial Flight Boost"))
                                         .description(OptionDescription.of(Text.literal("Disabling or Enabling a initial use of the Rockets for starting the flight")))
-                                        .binding(true, () -> config.mechanics.allowInitialFirework, val -> config.mechanics.allowInitialFirework = val)
+                                        .binding(false, () -> config.mechanics.allowInitialFirework, val -> config.mechanics.allowInitialFirework = val)
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
                                 .option(Option.<Integer>createBuilder()
