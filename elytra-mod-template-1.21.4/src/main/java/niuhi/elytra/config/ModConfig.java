@@ -14,7 +14,8 @@ public class ModConfig {
     public MechanicsConfig mechanics = new MechanicsConfig();
     public FeedbackConfig feedback = new FeedbackConfig();
     public DragConfig drag = new DragConfig();
-    
+    public DebugMode debug = new DebugMode();
+
     public static class CampFireConfig {
         public boolean enabled = true;
         public int detectionHeight = 10;
@@ -54,13 +55,26 @@ public class ModConfig {
         public double dragFactor = 0.92;
     }
 
+    public static class DebugMode {
+        public boolean enabled = false;
+        public boolean fireBoostHandler = true;
+        public boolean soulFireHandler = true;
+        public boolean fireworkSmokeHandler = true;
+        public boolean dragHandler = true;
+        public boolean initialFlightHandler = true;
+        public boolean feedbackHandler = true;
+        public boolean flightDetector = true;
+        public boolean Accessories = true;
+        public boolean YACL = true;
+    }
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("Elytra_Revamped.json");
     private static ModConfig INSTANCE;
 
     public static ModConfig init() {
         if (INSTANCE == null) {
-            INSTANCE = loadManual(); // Always load, no YACL dependency
+            INSTANCE = loadManual();
         }
         return INSTANCE;
     }
@@ -99,6 +113,9 @@ public class ModConfig {
     }
 
     public static ModConfig getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = loadManual(); // Ensure instance is always available
+        }
         return INSTANCE;
     }
 }

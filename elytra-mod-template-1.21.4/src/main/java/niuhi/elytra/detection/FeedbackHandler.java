@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 
 public class FeedbackHandler {
@@ -63,6 +64,10 @@ public class FeedbackHandler {
                     config.feedback.soundVolume,
                     config.feedback.soundPitch + (random.nextFloat() * 0.2f - 0.1f) // Slight random pitch variation
             );
+
+            if (config.debug.enabled && config.debug.feedbackHandler) {
+                DebugLogger.debug("FeedbackHandler", "Player %s received fire boost feedback", player.getName().getString());
+            }
         }
     }
 
@@ -112,6 +117,10 @@ public class FeedbackHandler {
                     config.feedback.soundVolume,
                     config.feedback.soundPitch * 0.7f + (random.nextFloat() * 0.1f) // Lower pitch for soul fire
             );
+
+            if (config.debug.enabled && config.debug.feedbackHandler) {
+                DebugLogger.debug("FeedbackHandler", "Player %s received soul fire pull feedback", player.getName().getString());
+            }
         }
     }
 }

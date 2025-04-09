@@ -1,5 +1,6 @@
 package niuhi.elytra.detection;
 
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -40,6 +41,10 @@ public class SoulFireHandler {
         }
 
         applySoulCampfirePull(player);
+
+        if (config.debug.enabled && config.debug.soulFireHandler) {
+            DebugLogger.debug("SoulFireHandler", "Player %s checked for soul fire pull", player.getName().getString());
+        }
     }
 
     /**
@@ -135,6 +140,10 @@ public class SoulFireHandler {
 
                     // Play feedback effects
                     feedbackHandler.playSoulFirePullFeedback(player);
+
+                    if (config.debug.enabled && config.debug.soulFireHandler) {
+                        DebugLogger.debug("SoulFireHandler", "Player %s pulled down by %s units", player.getName().getString(), pullAmount);
+                    }
                     return;
                 }
             }

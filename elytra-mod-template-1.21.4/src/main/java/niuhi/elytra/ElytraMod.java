@@ -2,6 +2,7 @@ package niuhi.elytra;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import niuhi.elytra.config.ModConfig;
 import niuhi.elytra.detection.ModEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,5 +23,16 @@ public class ElytraMod implements ModInitializer {
 			LOGGER.info("YACL Detected, Enabling in-game config page.");
 		}
 		ModEvents.register();
+
+		ModConfig config = ModConfig.getInstance();
+		if (config.debug.enabled) {
+			LOGGER.info("Debug mode is ENABLED - detailed logging active");
+			LOGGER.info("Debug settings: FireBoost={}, SoulFire={}, FireworkSmoke={}, Drag={}, InitialFlight={}, Feedback={}, FlightDetector={}, Accessories={}, YACL={}",
+					config.debug.fireBoostHandler, config.debug.soulFireHandler, config.debug.fireworkSmokeHandler,
+					config.debug.dragHandler, config.debug.initialFlightHandler, config.debug.feedbackHandler,
+					config.debug.flightDetector, config.debug.Accessories, config.debug.YACL);
+		} else {
+			LOGGER.info("Debug mode is DISABLED - only basic logging active");
+		}
 	}
 }

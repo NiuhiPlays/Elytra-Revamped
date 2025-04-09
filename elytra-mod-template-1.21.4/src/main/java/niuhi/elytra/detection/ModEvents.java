@@ -1,6 +1,7 @@
 package niuhi.elytra.detection;
 
 import niuhi.elytra.ElytraMod;
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -31,8 +32,12 @@ public class ModEvents {
 
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 initialFlightHandler.processTick(player);
-
                 boolean isCurrentlyFlying = flightDetector.isFlying(player);
+
+                if (config.debug.enabled && config.debug.initialFlightHandler) {
+                    DebugLogger.debug("InitialFlightHandler", "Player %s: isFlying=%b, position=%s",
+                            player.getName().getString(), isCurrentlyFlying, player.getPos());
+                }
 
                 if (isCurrentlyFlying) {
                     fireBoostHandler.processTick(player);
@@ -53,18 +58,23 @@ public class ModEvents {
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 ItemStack itemStack = player.getStackInHand(hand);
                 if (config != null && config.mechanics.disableFireworks &&
-                        player.isGliding() &&
+                        serverPlayer.isGliding() &&
                         itemStack.isOf(Items.FIREWORK_ROCKET)) {
 
-                    // Check if this is their initial firework use
                     if (initialFlightHandler.canUseInitialFirework(serverPlayer)) {
-                        // Let this firework use pass through
                         initialFlightHandler.markInitialFireworkUsed(serverPlayer);
+                        if (config.debug.enabled && config.debug.initialFlightHandler) {
+                            DebugLogger.debug("InitialFlightHandler", "Player %s used initial firework",
+                                    serverPlayer.getName().getString());
+                        }
                         return ActionResult.PASS;
                     }
 
-                    // Otherwise, show smoke effect
                     fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
+                    if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+                        DebugLogger.debug("FireworkSmokeHandler", "Player %s attempted firework use - blocked",
+                                serverPlayer.getName().getString());
+                    }
                     return ActionResult.FAIL;
                 }
             }

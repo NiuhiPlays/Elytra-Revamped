@@ -1,5 +1,6 @@
 package niuhi.elytra.detection;
 
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -40,6 +41,10 @@ public class FireBoostHandler {
 
         if (isAboveCampfire(player)) {
             applyBoostIfEligible(player);
+
+            if (config.debug.enabled && config.debug.fireBoostHandler) {
+                DebugLogger.debug("FireBoostHandler", "Player %s above campfire, checking boost eligibility", player.getName().getString());
+            }
         }
     }
 
@@ -185,6 +190,10 @@ public class FireBoostHandler {
 
             // Play feedback effects
             feedbackHandler.playFireBoostFeedback(player);
+
+            if (config.debug.enabled && config.debug.fireBoostHandler) {
+                DebugLogger.debug("FireBoostHandler", "Player %s boosted by %s units", player.getName().getString(), boostAmount);
+            }
         }
     }
 

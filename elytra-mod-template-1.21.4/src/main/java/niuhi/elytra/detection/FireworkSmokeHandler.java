@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,6 +61,11 @@ public class FireworkSmokeHandler {
 
         // Create or refresh smoke effect data with the calculated duration
         activeEffects.put(player, new SmokeEffectData(duration));
+
+        if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+            DebugLogger.debug("FireworkSmokeHandler", "Player %s triggered firework smoke effect, duration=%s",
+                    player.getName().getString(), duration);
+        }
     }
 
     /**
@@ -89,6 +95,9 @@ public class FireworkSmokeHandler {
             // Remove effect if player is offline or effect has expired
             if (!player.isAlive() || player.isRemoved() || !effectData.update()) {
                 iterator.remove();
+                if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+                    DebugLogger.debug("FireworkSmokeHandler", "Player %s smoke effect ended", player.getName().getString());
+                }
                 continue;
             }
 

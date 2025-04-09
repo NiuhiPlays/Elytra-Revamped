@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 
 public class DragHandler {
@@ -27,6 +28,10 @@ public class DragHandler {
         if (player.isSneaking()) {
             applyDrag(player);
             playDragFeedback(player);
+            if (config.debug.enabled && config.debug.dragHandler) {
+                DebugLogger.debug("DragHandler", "Player %s sneaking: drag applied, velocity=%s",
+                        player.getName().getString(), player.getVelocity());
+            }
         }
     }
 

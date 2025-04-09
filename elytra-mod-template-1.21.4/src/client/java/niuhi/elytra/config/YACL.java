@@ -12,8 +12,11 @@ public class YACL {
     public static Screen getConfigScreen(Screen parent) {
         if (!ElytraMod.YACL_LOADED) {
             ElytraMod.LOGGER.info("YACL not loaded");
+            DebugLogger.debug("YACL", "Config screen requested but YACL is not loaded, returning null");
             return null;
         }
+
+        DebugLogger.debug("YACL", "Building YACL config screen for Elytra Revamped");
 
         YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder()
                 .title(Text.literal("Elytra Revamped Config"))
@@ -141,7 +144,7 @@ public class YACL {
                                 .option(Option.<Integer>createBuilder()
                                         .name(Text.literal("Grace Period"))
                                         .description(OptionDescription.of(Text.literal("Grace period of Initial Flight Boost based on Ticks (20 Ticks = 1 Second).")))
-                                        .binding(20, () -> config.soulFire.pullCooldownTicks, val -> config.soulFire.pullCooldownTicks = val)
+                                        .binding(20, () -> config.mechanics.initialFireworkGraceTicks, val -> config.mechanics.initialFireworkGraceTicks = val)
                                         .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 100).step(5))
                                         .build())
                                 .build())
@@ -196,7 +199,80 @@ public class YACL {
                                         .build())
                                 .build())
                         .build())
-                .save(ModConfig::save);
-        return builder.build().generateScreen(parent);
+                .category(ConfigCategory.createBuilder()
+                        .name(Text.literal("Debug"))
+                        .tooltip(Text.literal("Configure debug logging options."))
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.literal("General"))
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Debug Enabled"))
+                                        .description(OptionDescription.of(Text.literal("Enable or disable all debug logging. Please keep in mind that this will SPAM your Live log.")))
+                                        .binding(false, () -> config.debug.enabled, val -> config.debug.enabled = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Fire Boost Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for FireBoostHandler.")))
+                                        .binding(true, () -> config.debug.fireBoostHandler, val -> config.debug.fireBoostHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Soul Fire Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for SoulFireHandler.")))
+                                        .binding(true, () -> config.debug.soulFireHandler, val -> config.debug.soulFireHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Firework Smoke Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for FireworkSmokeHandler.")))
+                                        .binding(true, () -> config.debug.fireworkSmokeHandler, val -> config.debug.fireworkSmokeHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Drag Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for DragHandler.")))
+                                        .binding(true, () -> config.debug.dragHandler, val -> config.debug.dragHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Initial Flight Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for InitialFlightHandler.")))
+                                        .binding(true, () -> config.debug.initialFlightHandler, val -> config.debug.initialFlightHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Feedback Handler"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for FeedbackHandler.")))
+                                        .binding(true, () -> config.debug.feedbackHandler, val -> config.debug.feedbackHandler = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Flight Detector"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for ElytraFlightDetector.")))
+                                        .binding(true, () -> config.debug.flightDetector, val -> config.debug.flightDetector = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("Accessories"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for Accessories compatibility.")))
+                                        .binding(true, () -> config.debug.Accessories, val -> config.debug.Accessories = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.literal("YACL"))
+                                        .description(OptionDescription.of(Text.literal("Enable debug logging for YACL and ModMenu.")))
+                                        .binding(true, () -> config.debug.YACL, val -> config.debug.YACL = val)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .build())
+                        .build())
+                .save(() -> {
+                    ModConfig.save();
+                    DebugLogger.debug("YACL", "YACL config screen saved changes");
+                });
+
+        Screen screen = builder.build().generateScreen(parent);
+        DebugLogger.debug("YACL", "YACL config screen generated successfully");
+        return screen;
     }
 }

@@ -1,6 +1,7 @@
 package niuhi.elytra.detection;
 
 import net.minecraft.server.network.ServerPlayerEntity;
+import niuhi.elytra.config.DebugLogger;
 import niuhi.elytra.config.ModConfig;
 
 import java.util.HashMap;
@@ -27,6 +28,10 @@ public class InitialFlightHandler {
             // Increment flight duration counter
             int currentDuration = flightDurationTicks.getOrDefault(playerId, 0);
             flightDurationTicks.put(playerId, currentDuration + 1);
+            if (config.debug.enabled && config.debug.initialFlightHandler) {
+                DebugLogger.debug("InitialFlightHandler", "Player %s flight duration: %s ticks",
+                        player.getName().getString(), currentDuration + 1);
+            }
         }
     }
 
