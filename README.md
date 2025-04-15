@@ -24,11 +24,13 @@ Visual and audible effects for Elytra flight.
 Controllable drag.   
 Alot of configurability.  
 Server-side only functionality.  
+Initial Rocket Boost Option.  
+YACL support for easier configuration.  
+Debug mode.  
+Accessories Compat.  
 
 Planned Features include:  
 
-YACL support for easier configuration.  
-Debug mode.  
 Optional client-side visual effects such as colored smoke trails and animated drag.  
 
 Modrinth link:  
