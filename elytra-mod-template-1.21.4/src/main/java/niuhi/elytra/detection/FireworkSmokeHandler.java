@@ -1,5 +1,9 @@
 package niuhi.elytra.detection;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworksComponent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -20,9 +24,6 @@ public class FireworkSmokeHandler {
     // Track active smoke effects
     private final Map<ServerPlayerEntity, SmokeEffectData> activeEffects = new HashMap<>();
 
-    // Base duration in ticks (20 ticks = 1 second)
-    private static final int BASE_DURATION = 40; // 2 seconds base duration
-
     public FireworkSmokeHandler(ModConfig config) {
         this.config = config;
     }
@@ -30,13 +31,19 @@ public class FireworkSmokeHandler {
     /**
      * Start a smoke particle effect when a player tries to use a firework while flying
      * @param player The player who tried to use the firework
-     * @param rocketStrength The strength/level of the firework rocket (1-3)
+     * @param flightDuration The flight duration of the firework rocket (1-3)
      */
-    public void playFireworkSmokeEffect(ServerPlayerEntity player, int rocketStrength) {
+    public void playFireworkSmokeEffect(ServerPlayerEntity player, int flightDuration) {
         // Skip if smoke effect is disabled
         if (!config.mechanics.enableFireworkSmoke) {
             return;
         }
+
+        // Clamp flight duration to valid range (1-3)
+        int clampedDuration = Math.max(1, Math.min(3, flightDuration));
+
+        // Map flight duration to smoke effect duration: 20, 40, or 60 ticks
+        int smokeDuration = clampedDuration * 20;
 
         // Play initial sound if sounds are enabled
         if (config.feedback.enableSounds) {
@@ -52,28 +59,72 @@ public class FireworkSmokeHandler {
             );
         }
 
-        // Calculate duration based on rocket strength
-        // Clamping strength to valid range (1-3)
-        int clampedStrength = Math.max(1, Math.min(3, rocketStrength));
-
-        // Duration scales with rocket strength: 40, 60, or 80 ticks (2s, 3s, or 4s)
-        int duration = BASE_DURATION + ((clampedStrength - 1) * 20);
-
         // Create or refresh smoke effect data with the calculated duration
-        activeEffects.put(player, new SmokeEffectData(duration));
+        activeEffects.put(player, new SmokeEffectData(smokeDuration));
 
         if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
-            DebugLogger.debug("FireworkSmokeHandler", "Player %s triggered firework smoke effect, duration=%s",
-                    player.getName().getString(), duration);
+            DebugLogger.debug("FireworkSmokeHandler", "Player %s triggered firework smoke effect, flightDuration=%d, smokeDuration=%d ticks",
+                    player.getName().getString(), clampedDuration, smokeDuration);
         }
     }
 
     /**
-     * Overloaded method for backward compatibility - uses default strength of 1
+     * Overloaded method to extract flight duration from a firework rocket item stack
+     * @param player The player who tried to use the firework
+     * @param fireworkStack The firework rocket item stack
+     */
+    public void playFireworkSmokeEffect(ServerPlayerEntity player, ItemStack fireworkStack) {
+        int flightDuration = getFlightDuration(fireworkStack);
+        playFireworkSmokeEffect(player, flightDuration);
+    }
+
+    /**
+     * Overloaded method for backward compatibility - uses default flight duration of 1
      * @param player The player who tried to use the firework
      */
     public void playFireworkSmokeEffect(ServerPlayerEntity player) {
         playFireworkSmokeEffect(player, 1);
+    }
+
+    /**
+     * Helper method to extract flight duration from a firework rocket item stack
+     * @param stack The firework rocket item stack
+     * @return The flight duration (1-3), defaults to 1 if invalid or not a firework
+     */
+    private int getFlightDuration(ItemStack stack) {
+        if (stack == null || stack.isEmpty() || stack.getItem() != Items.FIREWORK_ROCKET) {
+            if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+                DebugLogger.debug("FireworkSmokeHandler", "Invalid or non-firework item stack: %s, defaulting to flight duration 1",
+                        stack == null ? "null" : stack.toString());
+            }
+            return 1;
+        }
+
+        // Access the FireworksComponent using the Data Component API
+        FireworksComponent fireworksComponent = stack.get(DataComponentTypes.FIREWORKS);
+        if (fireworksComponent == null) {
+            if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+                DebugLogger.debug("FireworkSmokeHandler", "No Fireworks component for stack: %s, defaulting to flight duration 1",
+                        stack.toString());
+            }
+            return 1;
+        }
+
+        // Get the flight duration from the FireworksComponent
+        int flightDuration = fireworksComponent.flightDuration();
+        if (flightDuration < 1 || flightDuration > 3) {
+            if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+                DebugLogger.debug("FireworkSmokeHandler", "Invalid flight duration %d for stack: %s, defaulting to 1",
+                        flightDuration, stack.toString());
+            }
+            return 1;
+        }
+
+        if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
+            DebugLogger.debug("FireworkSmokeHandler", "Extracted flight duration %d for stack: %s",
+                    flightDuration, stack.toString());
+        }
+        return flightDuration;
     }
 
     /**

@@ -70,8 +70,8 @@ public class ModEvents {
                         return ActionResult.PASS;
                     }
 
-                    // Trigger smoke effect
-                    fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
+                    // Trigger smoke effect using the firework's ItemStack
+                    fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer, itemStack);
 
                     // Consume the firework item unless in creative mode
                     if (!serverPlayer.isCreative()) {
