@@ -70,9 +70,16 @@ public class ModEvents {
                         return ActionResult.PASS;
                     }
 
+                    // Trigger smoke effect
                     fireworkSmokeHandler.playFireworkSmokeEffect(serverPlayer);
+
+                    // Consume the firework item unless in creative mode
+                    if (!serverPlayer.isCreative()) {
+                        itemStack.decrement(1);
+                    }
+
                     if (config.debug.enabled && config.debug.fireworkSmokeHandler) {
-                        DebugLogger.debug("FireworkSmokeHandler", "Player %s attempted firework use - blocked",
+                        DebugLogger.debug("FireworkSmokeHandler", "Player %s attempted firework use - blocked and consumed",
                                 serverPlayer.getName().getString());
                     }
                     return ActionResult.FAIL;
