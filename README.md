@@ -6,7 +6,7 @@ Decided it took long enough for a mod like this comeback...
 This mod is inspired by Aileron  
 link: https://modrinth.com/mod/aileron  
 
-But now it's on Fabric 1.21.4  
+But now it's on Fabric 1.21.4 & 1.21.5  
 
 Made this mod in my free time and will continue updating the mod whenever I feel like.  
 I have more plans for this mod but most is purely cosmetic's.  
