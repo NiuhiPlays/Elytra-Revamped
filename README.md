@@ -1,3 +1,13 @@
+Please go to the [NEW](https://github.com/NiuhiPlays/ElytraRevamped_ReReWritten) version of the mod!
+
+It has most if not all features I had planned. I also updated it to support 1.21.4+
+
+
+
+
+
+
+
 ![image](https://i.postimg.cc/rsWLmN7m/Elytra-Revamped-2.png)
 
 
